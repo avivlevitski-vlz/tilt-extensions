@@ -2,20 +2,26 @@
 
 trigger_file = str(local('mktemp "${TMPDIR:-/tmp}/tilt-kubefwd.XXXXXXXXX"')).strip()
 
-scripts_dir = '../'
+extension_dir = os.path.dirname(os.path.dirname(__file__))
+scripts_dir = os.path.join(extension_dir, 'scripts')
 scripts = [
   'sudo-kubefwd.sh',
   'run-kubefwd.sh',
   'run-kubefwd-internal.sh',
   'watch-namespaces.sh',
 ]
+
 scripts_paths = [os.path.join(scripts_dir, script) for script in scripts]
 
+
 def load_kubefwd(namespaces=[], resource_deps=[]):
+  print("cwd: ", scripts_dir)
+  local([scripts_dir+'/create-refresh-button.sh', trigger_file])
   local_resource(
     name='kubefwd:run',
-    serve_cmd=['./sudo-kubefwd.sh', trigger_file],
-    deps=scripts_paths,
+    serve_cmd=["./sudo-kubefwd.sh", trigger_file],
+    deps=scripts,
     resource_deps=resource_deps,
     serve_env={'TILT_CFG_NAMESPACES': ' '.join(namespaces)},
+    serve_dir=scripts_dir,
   )
