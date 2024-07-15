@@ -15,7 +15,7 @@ def load_kubefwd(resource_name, namespaces=[], resource_deps=[]):
   local_resource(
     name='kubefwd'+resource_name,
     serve_cmd=['./sudo-kubefwd.sh', trigger_file],
-    deps=[scripts_paths],
+    deps=scripts_paths,
     resource_deps=resource_deps,
     serve_env={'TILT_CFG_NAMESPACES': ' '.join(namespaces)},
   )
