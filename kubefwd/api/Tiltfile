@@ -9,7 +9,7 @@ scripts = [
   'run-kubefwd-internal.sh',
   'watch-namespaces.sh',
 ]
-scripts_paths = [os.path.join(scripts_dir, script) for script in scripts]
+scripts_paths = [scripts_dir+'/'+script for script in scripts]
 
 def load_kubefwd(resource_name, namespaces=[], resource_deps=[]):
   local_resource(
