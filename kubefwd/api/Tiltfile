@@ -1,14 +1,21 @@
 
-scripts_dir = '../scripts'
 
 trigger_file = str(local('mktemp "${TMPDIR:-/tmp}/tilt-kubefwd.XXXXXXXXX"')).strip()
+
+scripts_dir = '../scripts'
+scripts = [
+  'sudo-kubefwd.sh',
+  'run-kubefwd.sh',
+  'run-kubefwd-internal.sh',
+  'watch-namespaces.sh',
+]
+scripts_paths = [os.path.join(scripts_dir, script) for script in scripts]
 
 def load_kubefwd(resource_name, namespaces=[], resource_deps=[]):
   local_resource(
     name='kubefwd'+resource_name,
     serve_cmd=['./sudo-kubefwd.sh', trigger_file],
-    deps=[scripts_dir+'/sudo-kubefwd.sh', 'run-kubefwd.sh', 'run-kubefwd-internal.sh', 'watch-namespaces.sh'],
+    deps=[scripts_paths],
     resource_deps=resource_deps,
     serve_env={'TILT_CFG_NAMESPACES': ' '.join(namespaces)},
-    dir=scripts_dir,
   )
