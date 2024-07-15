@@ -6,6 +6,7 @@ cfg = config.parse()
 
 namespaces = cfg.get('namespaces', [])
 resource_deps = cfg.get('resource_deps', [])
+print(resource_deps)
 
 trigger_file = str(local('mktemp "${TMPDIR:-/tmp}/tilt-kubefwd.XXXXXXXXX"')).strip()
 
